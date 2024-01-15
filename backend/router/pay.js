@@ -17,7 +17,7 @@ router.get("/", auth, async (req, res) => {
 // 결제 및 금액 수정
 router.post("/", auth, async (req, res) => {
   const beforeCurrency = await req.user.currency;
-  const paidCurrency = await req.body.currency;
+  const paidCurrency = await req.body.pay;
   const afterCurrency = await beforeCurrency.map((n, i) => n + paidCurrency[i]);
   const history = new History({
     userId: req.user._id,
@@ -28,7 +28,21 @@ router.post("/", auth, async (req, res) => {
     return res.json({ success: false, err });
   });
   User.findOneAndUpdate({ _id: req.user._id }, { currency: afterCurrency })
-    .then(() => res.status(200).send({ success: true, afterCurrency }))
+    .then(() => res.status(200).send({ success: true, currency: afterCurrency }))
+    .catch((err) => res.json({ success: false, err }));
+});
+
+// 금액 쪼개기
+router.patch("/", auth, async (req, res) => {
+  const { currency } = await req.user;
+  const { unit } = await req.body;
+  // 해당 화폐를 하나 빼고
+  currency[unit] -= 1;
+  // 홀수 번호대는 5n : 짝수 번호대는 1n
+  unit % 2 ? (currency[unit + 1] += 5) : (currency[unit + 1] += 2);
+
+  User.findOneAndUpdate({ _id: req.user._id }, { currency })
+    .then(() => res.status(200).send({ success: true, currency }))
     .catch((err) => res.json({ success: false, err }));
 });
 
@@ -49,22 +63,8 @@ router.put("/", auth, async (req, res) => {
     return res.json({ success: false, message: "History save failed" });
   });
   User.findOneAndUpdate({ _id: req.user._id }, { currency: afterCurrency })
-    .then(() => res.status(200).send({ success: true, afterCurrency }))
+    .then(() => res.status(200).send({ success: true, currency: afterCurrency }))
     .catch((err) => res.json({ success: false, message: "User update failed" }));
-});
-
-// 금액 쪼개기
-router.patch("/", auth, async (req, res) => {
-  const { currency } = await req.user;
-  const { unit } = await req.body;
-  // 해당 화폐를 하나 빼고
-  currency[unit] -= 1;
-  // 홀수 번호대는 5n : 짝수 번호대는 1n
-  unit % 2 ? (currency[unit + 1] += 5) : (currency[unit + 1] += 2);
-
-  User.findOneAndUpdate({ _id: req.user._id }, { currency })
-    .then(() => res.status(200).send({ success: true, currency }))
-    .catch((err) => res.json({ success: false, err }));
 });
 
 module.exports = router;

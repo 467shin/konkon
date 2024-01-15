@@ -36,87 +36,179 @@
 
 ### users
 
-1. 아이디 중복 체크
-   - GET /api/user
-   - req { id }
-   - res { isValid: t/f }
-2. 회원 가입 기능
-   - POST /api/user
-   - req { nickname, id, password }
-   - res { success : t/f }
-3. 로그인 기능
-   - PATCH /api/user/
-   - req { id, password }
-   - res { loginSuccess : t/f, nickname, currency } && cookie
-4. 로그아웃 기능
-   - DELETE /api/user
-   - res cookie
-   - res { success: t/f, message }
+<details>
+<summary>click to open!</summary>
+
+<br>
+
+**1. 아이디 중복 체크**
+
+- GET /api/user
+  ```
+  req { id }
+  res { isValid: t/f }
+  ```
+
+**2. 회원 가입 기능**
+
+- POST /api/user
+  ```
+  req { nickname, id, password }
+  res { success : t/f }
+  ```
+
+**3. 로그인 기능**
+
+- PATCH /api/user/
+  ```
+  req { id, password }
+  res { loginSuccess : t/f, nickname, currency } && cookie
+  ```
+
+**4. 로그아웃 기능**
+
+- DELETE /api/user
+  ```
+  res cookie
+  res { success: t/f, message }
+  ```
+
+</details>
 
 ### pay
 
-1. 금액 조회 기능
-   - GET /api/pay
-   - 내가 가진 금액을 조회하는 API
-2. 결제 기능 + 금액 수정 기능 + 금액 쪼개기 기능
-   - POST /api/pay
-   - 계산되는 금액과 권장되는 화폐 단위, 거스름돈을 서버로 보냄
-   - 유저가 가진 단위 별 금액이 갱신되며 history에 결제 내역이 추가된다.
-   - 친구한테 1000엔짜리 하나 빌려주거나 길에서 돈 주웠을 때 사용하는 API
-   - history에 들어감
-3. 금액 쪼개기 기능
-   - PATCH /api/pay
-   - ex) 500엔을 100엔 5개로 쪼갤 때 사용
-4. 금액 전체 수정 기능
-   - PUT /api/pay
-   - 지폐 동전 하나하나 입력하여 등록 및 수정함
-   - 수정하면 히스토리에 금액 중간 점검 같은 느낌으로 찍힘
+<details>
+<summary>click to open!</summary>
+
+<br>
+
+**1. 잔고 조회 기능**
+
+- GET /api/pay
+  ```
+  req cookie
+  res { currency }
+  ```
+
+**2. 결제 기능 + 금액 수정 기능**
+
+- 계산되는 금액과 권장되는 화폐 단위, 거스름돈을 서버로 보냄
+- 유저가 가진 단위 별 금액이 갱신되며 history에 결제 내역이 추가된다.
+- 친구한테 1000엔짜리 하나 빌려주거나 길에서 돈 주웠을 때 사용하는 API
+- 내역이 history에 들어감
+- 금액을 보내면 바뀐 금액을 반환해준다
+- POST /api/pay
+  ```
+  req { pay } && cookie
+  res { success, currency }
+  ```
+
+**3. 금액 쪼개기 기능**
+
+- ex) 1000엔을 500엔 2개로 or 500엔을 100엔 5개로 쪼갤 때 사용
+- unit으로 자릿수를 보낸다.
+- PATCH /api/pay
+  ```
+  req { unit } && cookie
+  res { currency }
+  ```
+
+**4. 금액 전체 수정 기능**
+
+- 지폐 동전 하나하나 입력하여 등록 및 수정함
+- 수정하면 히스토리에 금액 중간 점검 같은 느낌으로 찍힘
+- PUT /api/pay
+  ```
+  req { currency } && cookie
+  res { success, currency }
+  ```
+
+</details>
 
 ### history
 
-1. 내 결제 내역 조회 - GET
-   - 지금까지 서버로 전송된 히스토리 조회
-2. 결제 내역 수정 - PATCH
-   - 가계부에 내용 작성
-3. 결제 내역 삭제 - DELETE
-   - 어라 잘못 했다 지운다
+<details>
+<summary>click to open!</summary>
+
+<br>
+
+**1. 내 결제 내역 조회**
+
+- 지금까지 서버로 전송된 히스토리 조회
+- GET api/history
+
+  ```
+  req cookie
+  res { histories }
+  ```
+
+**2. 결제 내역 수정**
+
+- 가계부에 내용 작성
+- PATCH
+
+  ```
+  req { _id, description }
+  res { success, message }
+  ```
+
+**3. 결제 내역 삭제**
+
+- 어라 잘못 했다 지운다
+- DELETE
+
+  ```
+  req { _id }
+  res { success, message }
+
+  ```
+
+</details>
 
 ## DB 설계
 
-### users
+### 1. users
 
-- id
+- **id**
+
   - str
   - unique
-- nickname
-  - str
-- pw
-  - str
-- currency(embedded doc)
 
-### history
+- **nickname**
 
-- userId
+  - str
+  - max 20
+
+- **pw**
+
+  - str
+  - min 5
+
+- **currency(embedded doc)**
+
+### 2. history
+
+- **userId**
+
   - user's object id
-- date
+
+- **date**
+
   - date
-- discription
+
+- **discription**
+
   - string
-- beforeCurrency(embedded doc)
-- paidCurrency(embedded doc)
 
-### currency
+- **beforeCurrency(embedded doc)**
 
-- array
-  - 10000
-  - 5000
-  - 1000
-  - 500
-  - 100
-  - 50
-  - 10
-  - 5
-  - 1
+- **paidCurrency(embedded doc)**
+
+### 3. currency
+
+- **array**
+  - [0] \* 9
+  - [ 10000, 5000 ... 10 ]
 
 ### 고민점
 
