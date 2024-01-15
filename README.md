@@ -2,6 +2,16 @@
 
 ## 일본 여행자를 위한 금전 관리 웹앱
 
+<details open>
+<summary>목차</summary>
+
+1. [기획 배경](#기획-배경)
+2. [기술 스택 및 선정 이유](#기술-스택-및-선정-이유)
+3. [API 명세](#api-명세)
+4. [DB 설계](#db-설계)
+
+</details>
+
 ### 기획 배경
 
 1. 한국 사람은 뒷사람의 눈치를 보고 계산을 빠르게 끝내기 위해 동전을 얼마나 들고 있든 1000엔 지폐를 내버리는 경향이 있다.
@@ -76,20 +86,28 @@
 #### users
 
 - id
+  - str
+  - unique
 - nickname
+  - str
 - pw
+  - str
 - currency(embedded doc)
 
 #### history
 
 - userId
+  - user's object id
 - date
+  - date
 - discription
-- currency(embedded doc)
+  - string
+- beforeCurrency(embedded doc)
+- paidCurrency(embedded doc)
 
 #### currency
 
-- list
+- array
   - 10000
   - 5000
   - 1000
@@ -107,4 +125,4 @@
 - user는 history를 여러 개 가져야 한다. One-to-Squillions
 
 - user --- cur && history --- cur은 Embedded
-- user --< history는 References 방식으로 할 수 있는
+- user --< history는 References 방식으로
