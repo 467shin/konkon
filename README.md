@@ -12,29 +12,29 @@
 
 </details>
 
-### 기획 배경
+## 기획 배경
 
 1. 한국 사람은 뒷사람의 눈치를 보고 계산을 빠르게 끝내기 위해 동전을 얼마나 들고 있든 1000엔 지폐를 내버리는 경향이 있다.
 2. 결국 귀국 날이 다가오면 동전을 쩔렁쩔렁 들고 다니게 되며, 이를 털기 위해 가챠 등 불필요한 소비를 하게 된다.
    <br>
    ~~물론 나는 일본여행 갈 때마다 10만원 단위로 가챠퐁에 쓰는 만큼 구엽고 아기자기한 것을 좋아한다.~~
 
-### 기술 스택 및 선정 이유
+## 기술 스택 및 선정 이유
 
-#### Front-end
+### Front-end
 
 - React : TypeScript와 가장 궁합이 좋고, user pool이 넓어 reference를 구하기 쉬운 React를 선정하였습니다.
 - TypeScript : Runtime error에서 벗어나 개발 단계의 품을 줄여주고 Web Service의 성능을 올려주는 정적 타입 언어인 TypeScript를 선정하였습니다.
 - Styled-Component : 코드 경량화를 위해 CSS-in-JS 방식의 styled-component를 선정하였습니다.
 
-#### Back-end
+### Back-end
 
 - Express.js : 프로젝트의 규모가 그리 크지 않기 때문에 간단한 기능 구현에 있어 가장 가볍고 빠르게 개발할 수 있는 Express.js를 선정하였습니다.
 - MongoDB : DataBase 설계 당시 3개의 Schema가 상호 관계를 가지고 있었고, RDBMS를 사용할 경우 쿼리문이 복잡해질 상황이 우려되었습니다. 이에 Embedded 방식을 통해 유연한 스키마를 지원하는 NoSQL 중에서, Express.js와 궁합이 좋은 MongoDB를 선정하였습니다.
 
-### API 명세
+## API 명세
 
-#### users
+### users
 
 1. 아이디 중복 체크
    - GET /api/user
@@ -53,7 +53,7 @@
    - res cookie
    - res { success: t/f, message }
 
-#### pay
+### pay
 
 1. 금액 조회 기능
    - GET /api/pay
@@ -72,7 +72,7 @@
    - 지폐 동전 하나하나 입력하여 등록 및 수정함
    - 수정하면 히스토리에 금액 중간 점검 같은 느낌으로 찍힘
 
-#### history
+### history
 
 1. 내 결제 내역 조회 - GET
    - 지금까지 서버로 전송된 히스토리 조회
@@ -81,9 +81,9 @@
 3. 결제 내역 삭제 - DELETE
    - 어라 잘못 했다 지운다
 
-### DB 설계
+## DB 설계
 
-#### users
+### users
 
 - id
   - str
@@ -94,7 +94,7 @@
   - str
 - currency(embedded doc)
 
-#### history
+### history
 
 - userId
   - user's object id
@@ -105,7 +105,7 @@
 - beforeCurrency(embedded doc)
 - paidCurrency(embedded doc)
 
-#### currency
+### currency
 
 - array
   - 10000
@@ -118,7 +118,7 @@
   - 5
   - 1
 
-#### 고민점
+### 고민점
 
 - user는 자신의 자산 상황을 currency를 참조하여야 한다. One-to-One
 - history는 계산의 결과를 currency를 참조하여야 한다. One-to-One
