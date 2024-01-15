@@ -37,7 +37,7 @@
 ### users
 
 <details>
-<summary>click to open!</summary>
+<summary>Click to open!</summary>
 
 <br>
 
@@ -78,7 +78,7 @@
 ### pay
 
 <details>
-<summary>click to open!</summary>
+<summary>Click to open!</summary>
 
 <br>
 
@@ -128,7 +128,7 @@
 ### history
 
 <details>
-<summary>click to open!</summary>
+<summary>Click to open!</summary>
 
 <br>
 
