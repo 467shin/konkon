@@ -24,7 +24,7 @@
 
 ### Front-end
 
-- React : TypeScript와 가장 궁합이 좋고, user pool이 넓어 reference를 구하기 쉬운 React를 선정하였습니다.
+- React : 여행에 다니는 사람들이 타겟인 만큼 Mobile App에 맞추어 서비스를 구상하였으나, 유저로 부터 input 받은 지출내역을 토대로 등록되는 시스템인 만큼 푸시알림이나 카메라, 마이크 접근같은 기능이 필요하지 않다고 판단하였습니다. 이에 web front-end framework 중 TypeScript와 가장 궁합이 좋고, user pool이 넓어 reference를 구하기 쉬운 React를 선정하였습니다.
 - TypeScript : Runtime error에서 벗어나 개발 단계의 품을 줄여주고 Web Service의 성능을 올려주는 정적 타입 언어인 TypeScript를 선정하였습니다.
 - Styled-Component : 코드 경량화를 위해 CSS-in-JS 방식의 styled-component를 선정하였습니다.
 
